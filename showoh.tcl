@@ -1,3 +1,6 @@
+#pbc unwrap -all
+#display depthcue off
+
 # declare the pbc function
 proc pbc_round {f} {
         
@@ -8,7 +11,6 @@ proc pbc_round {f} {
 		if {$f < 0} { set n [expr $n - 1]}
 	}
 return $n
-
 }  
 
 
@@ -19,30 +21,53 @@ set nframes [molinfo top get numframes]
 set xlat 12.42
 set ylat 12.42
 set zlat 12.42
-# loop through each frame
 
-for { set i 0 } { $i < 1} { incr i } {
+variable oindex
+variable hindex
+
+for { set i 0 } { $i < 1} { incr i 20} {
 	# go to the frame
 	animate goto $i
+	rotate y by 1.0 
+	display update	
 	
-	set oatoms [[atomselect top "name O"] get index]	
-	set hatoms [[atomselect top "name H"] get index]
-	
-	set onum [llength $oatoms]
-	set hnum [llength $hatoms]
 
-	for { set j 60 } { $j < 61 } {incr j} {
+	set oatom [[atomselect top "name O"] get index]
+	set hatom [[atomselect top "name H"] get index]
+
+	set oatoms [atomselect top "name O"]	
+	set hatoms [atomselect top "name H"]
+
+
+	set ox [$oatoms get {x}]
+	set oy [$oatoms get {y}]
+	set oz [$oatoms get {z}]
+	set hx [$hatoms get {x}]
+        set hy [$hatoms get {y}]
+        set hz [$hatoms get {z}]
+	
+	set onum [llength $oatom]
+	set hnum [llength $hatom]
+	
+	for { set j 0 } { $j < $onum } {incr j} {
 		set count 0
 		for { set k 0} { $k < $hnum } { incr k } {
+		
+			set dx [expr [lindex $ox $j] - [lindex $hx $k]]
+			set dy [expr [lindex $oy $j] - [lindex $hy $k]]
+			set dz [expr [lindex $oz $j] - [lindex $hz $k]]
 			
-	       		set blength [list [lindex $oatoms $j] [lindex $hatoms $k]]
-			set bl [measure bond $blength frame $i]
-			set newbl [expr $bl - [expr [pbc_round [expr $bl/$xlat]]*$xlat]]
-			puts $newbl
-			#if { ([expr abs($bl)] <= 1.1)&& ([expr abs($bl)] >= 0.9)} { incr count }
+			set dx [expr $dx - [expr [pbc_round [expr $dx/$xlat]]*$xlat]]
+			set dy [expr $dy - [expr [pbc_round [expr $dy/$ylat]]*$ylat]]
+			set dz [expr $dz - [expr [pbc_round [expr $dz/$zlat]]*$zlat]]	
+			
+			set dist [expr sqrt( $dx*$dx + $dy*$dy + $dz*$dz )]
+			if {$dist < 1.2} {
+			incr count
+			}
 		}
-        #puts "frame $i : O $j : count =  $count"
-	} 
+	puts "O$j : $count"
+	}
 }
 	
 	
