@@ -1,5 +1,8 @@
-#pbc unwrap -all
-#display depthcue off
+pbc unwrap -all
+display depthcue off
+mol modstyle 0 0 VDW 0.100000 120.000000
+mol addrep 0 
+mol modstyle 1 0 DynamicBonds 1.15 0.1 600.0
 
 # declare the pbc function
 proc pbc_round {f} {
@@ -25,7 +28,7 @@ set zlat 12.42
 variable oindex
 variable hindex
 
-for { set i 0 } { $i < 1} { incr i 20} {
+for { set i 0 } { $i < $nframes} { incr i 20} {
 	# go to the frame
 	animate goto $i
 	rotate y by 1.0 
@@ -64,10 +67,22 @@ for { set i 0 } { $i < 1} { incr i 20} {
 			set dist [expr sqrt( $dx*$dx + $dy*$dy + $dz*$dz )]
 			if {$dist < 1.2} {
 			incr count
+			lappend hindex $k
 			}
 		}
-	puts "O$j : $count"
+	if {($count == 1)} {
+	lappend oindex $j
 	}
+	}
+	mol addrep 0
+	mol modselect 2 0 index $oindex 
+	mol modcolor 2 0 ColorID 0
+	mol modstyle 2 0 VDW 0.3 100.0
+	mol modselect 3 0 index $oindex
+	mol modcolor 3 0 ColorID 0
+	mol modstyle 3 0 DynamicBonds 1.15 0.2 600.0
+	unset oindex
+	
 }
 	
 	
