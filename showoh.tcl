@@ -78,17 +78,19 @@ for { set i 0 } { $i < $nframes} { incr i 20} {
 			set dz [expr $dz - [expr [pbc_round [expr $dz/$zlat]]*$zlat]]	
 			
 			set dist [expr sqrt( $dx*$dx + $dy*$dy + $dz*$dz )]
-			if {$dist < 1.2} {
+			if {$dist < 1.35} {
 			incr count
-			lappend hindex $k
+			lappend hindex [expr $k + 64]
 			}
 		}
 
 	if {($count == 1)} {
 	lappend oindex $j
+	set showh $hindex
 	}
+	unset hindex
 	}
-
+	
 	set olen [llength $oindex]
 
 	if { $olen != 1} {
@@ -97,15 +99,16 @@ for { set i 0 } { $i < $nframes} { incr i 20} {
 
 	
 	mol addrep 0
-	mol modselect 3 0 index $oindex  
+	mol modselect 3 0 index $oindex $showh 
 	mol modcolor 3 0 ColorID 12
 	mol modmaterial 3 0 Glossy
 	mol modstyle 3 0 VDW 0.3 100.0
-	mol modselect 4 0 index $oindex 
+	mol modselect 4 0 index $oindex $showh
 	mol modcolor 4 0 ColorID 12
 	mol modmaterial 4 0 Glossy
 	mol modstyle 4 0 DynamicBonds 1.5 0.2 100.0
 	unset oindex
+	unset showh
 	}
 }
 	
