@@ -36,7 +36,7 @@ set zlat 12.42
 
 
 variable hindex
-variable hyd
+variable showh
 
 for { set i 0 } { $i < $nframes} { incr i 20} {
 
@@ -86,10 +86,11 @@ for { set i 0 } { $i < $nframes} { incr i 20} {
 
 	if {($count == 1)} {
 	lappend oindex $j
-	set showh $hindex
+	lappend showh $hindex
 	}
 	unset hindex
 	}
+	
 	
 	set olen [llength $oindex]
 
@@ -109,6 +110,7 @@ for { set i 0 } { $i < $nframes} { incr i 20} {
 	mol modstyle 4 0 DynamicBonds 1.5 0.2 100.0
 	unset oindex
 	unset showh
+	
 	}
 }
 	
