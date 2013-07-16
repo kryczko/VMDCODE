@@ -21,9 +21,8 @@ for {set i 0} {$i < $nframes} {incr i 10} {
 	set filename "/home/kryczko/git/VMDCODE/CHARGE!/chg[format "00%d" $j]"
 	puts $filename
 	display resetview
-	mol representation Isosurface
+	mol representation Isosurface 0.5 0 0 2 1 1 
 	mol new $filename type {CHGCAR} first 0 last -1 step 1 waitfor 1 volsets {0 }
-	pbc box off
 	if {$j > 1} {
 	mol delete [expr $j - 1]
 	}
@@ -34,10 +33,9 @@ for {set i 0} {$i < $nframes} {incr i 10} {
         puts $filename
 
 	display resetview
-        mol representation Isosurface
+        mol representation Isosurface 0.5 0 0 2 1 1
         mol new "/home/kryczko/git/VMDCODE/CHARGE!/$filename" type {CHGCAR} first 0 last -1 step 1 waitfor 1 volsets {0 }
         
-	pbc box off
 	mol delete [expr $j - 1]
 	}
 	
@@ -48,9 +46,9 @@ for {set i 0} {$i < $nframes} {incr i 10} {
 
 
 	display resetview
-        mol representation Isosurface
+        mol representation Isosurface 0.5 0 0 2 1 1
         mol new "/home/kryczko/git/VMDCODE/CHARGE!/$filename" type {CHGCAR} first 0 last -1 step 1 waitfor 1 volsets {0 }
-        pbc box off
+	
 	mol delete [expr $j - 1]
 	}
 	
