@@ -38,18 +38,10 @@ set zlat 12.42
 variable hindex
 variable showh
 
-for { set i 0 } { $i < $nframes} { incr i 20} {
+for { set i 0 } { $i < $nframes} { incr i 10} {
 
 	set oindex 0 	
-	# go to the frame
-	animate goto $i
-        mol delrep 5 0
-       	rotate y by 5.0 
-	display update	
 	
- 	set filename snap.[format "%04d"  $i].rgb
-		render snapshot $filename
-
 	set oatom [[atomselect top "name O"] get index]
 	set hatom [[atomselect top "name H"] get index]
 
@@ -112,8 +104,17 @@ for { set i 0 } { $i < $nframes} { incr i 20} {
 	mol modstyle 4 0 DynamicBonds 1.5 0.2 1000.0
 	unset oindex
 	unset showh
-	
 	}
+
+	# go to the frame
+        animate goto $i
+        mol delrep 5 0
+
+        display update
+
+        set filename snap.[format "%04d"  $i].rgb
+               render snapshot $filename
+
 }
 	
 	
