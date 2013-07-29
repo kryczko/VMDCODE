@@ -146,7 +146,6 @@ int main()
 	{
 		if (timecount[i] != 0)
 		{
-			cout << timecount[i]*timestep << endl;	
 			bin_num = int( timecount[i]*timestep)/10; 
 			bin[bin_num] ++;
 		}
@@ -154,8 +153,8 @@ int main()
 	
 	for (int i = 0; i < 20; i ++)
 	{
-		output << i << "\t" << bin[i] << endl;
-		output << i + 1 << "\t" << bin[i] << endl;
+		output << i*10 << "\t" << bin[i] << endl;
+		output << (i + 1)*10 << "\t" << bin[i] << endl;
 	}
 	
 	input.close();
